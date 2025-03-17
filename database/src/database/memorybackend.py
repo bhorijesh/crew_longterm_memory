@@ -31,10 +31,11 @@ class MySQLMemoryBackend:
         create_table_sql = """
         CREATE TABLE IF NOT EXISTS crew_memory (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            `key` VARCHAR(255) NOT NULL,
-            value TEXT NOT NULL,
             task_description TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            `metadata` text,
+            `datetime` float DEFAULT NULL,
+            `score` float DEFAULT NULL
         );
         """
         try:
@@ -57,7 +58,7 @@ class MySQLMemoryBackend:
         
         # Serialize metadata to JSON if it is a dictionary
         if isinstance(metadata, dict):
-            metadata = json.dumps(metadata)  # Convert dictionary to JSON string
+            metadata = json.dumps(metadata)  
         
         query = "INSERT INTO crew_memory (task_description, score, metadata, datetime) VALUES (%s, %s, %s, %s)"
         try:
