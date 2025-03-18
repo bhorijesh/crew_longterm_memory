@@ -16,8 +16,9 @@ def run():
     """
     Run the crew.
     """
+    Topic = input("Enter a topic :")
     inputs = {
-        'topic': 'History of Nepal',
+        'topic': Topic,
         'current_year': str(datetime.now().year)
     }
     

@@ -50,12 +50,6 @@ class MySQLMemoryBackend:
 
     def save(self, task_description=None, score=None, metadata=None, datetime=None):
         """Save a task_description to the database, with optional metadata."""
-        if datetime:
-            # Check if datetime is in Unix timestamp format
-            if isinstance(datetime, (int, float)):
-                # Convert the timestamp to datetime format
-                datetime = datetime.datetime.utcfromtimestamp(datetime).strftime('%Y-%m-%d %H:%M:%S')
-        
         # Serialize metadata to JSON if it is a dictionary
         if isinstance(metadata, dict):
             metadata = json.dumps(metadata)  
