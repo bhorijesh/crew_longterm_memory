@@ -1,0 +1,5 @@
+crewai
+crewai-tools
+pymysql
+sqlalchemy
+google-ads

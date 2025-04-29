@@ -1,0 +1,44 @@
+product_information_gather_task:
+  description: >
+    Collect detailed {Products} product information, including features, specifications, and benefits, to support content creation.
+  expected_output: >
+    A detailed product information report, including features, specifications, and benefits, to support content creation.
+  agent: product_information_gatherer
+
+keyword_research_task:
+  description: >
+    Conduct in-depth keyword research for a blog post based on the seed keywords from product_information_gather_task.
+    These keywords are derived from the product information, including features, specifications, and benefits of the product.
+    Take into account the tone {Tone} and language {Language} specified by the user.
+    Ensure keyword suggestions are optimized for blog content in {current_year}, focusing on search relevance, volume, and user intent.
+  expected_output: >
+    A list of 10-15 SEO-friendly keywords or keyphrases that are semantically related to the seed keywords and suitable for high-performing blog content.
+    The results should be formatted as a bullet list.
+  agent: keyword_researcher
+
+blog_writing_task:
+  description: >
+    Based on the keyword list provided by the keyword researcher, write a blog post.
+    Use the user's desired tone {Tone} and language {Language}.
+  expected_output: >
+    A well-written blog using the researched keywords.
+    The blog should be engaging, informative, and optimized for SEO.
+    The content should be structured with headings, subheadings, and bullet points where appropriate.
+    The final output should be in markdown format.
+    The blog should be tailored to the target audience and align with current SEO best practices for {current_year}.
+  agent: blog_writer
+
+seo_optimization_task:
+  description: >
+    After the blog post is written, check if the generated keywords from the keyword research are present in the content.
+    If any keywords are missing, send the blog post back to the blog writer for revisions. If all keywords are present, verify the integration and finalize the blog for publication.
+  expected_output: >
+    A finalized blog post with all keywords present and properly integrated. If any keywords are missing, return the blog to the writer for revisions.
+  agent: seo_agent
+
+final_write_task:
+  description: >
+    Review and refine the final blog post, addressing grammatical errors, improving readability, and enhancing structure. Ensure that the content flows naturally, is humanized, and is formatted properly in Markdown. Ensure the blog is optimized for SEO and ready for publication by integrating the provided SEO keywords into the content naturally, without listing them separately. The final blog should be easy to read, SEO-optimized, and formatted in Markdown, ready for publication. Just include Introduction, Body, and Conclusion sections in the final output. Don't add any other sections.
+  expected_output: >
+    A polished, humanized blog post, free of grammatical errors, with clear structure using proper headings, subheadings, and bullet points. The final blog should be easy to read, SEO-optimized, and formatted in Markdown, ready for publication with the generated keywords integrated naturally into the content. It should be engaging and tailored to the target audience, ensuring it aligns with the specified tone and language. Just include **Introduction**, **Body**, and **Conclusion** sections in the final output. Don't add any other sections.
+  agent: final_writer
