@@ -4,7 +4,7 @@ from crewai.project import CrewBase, agent, crew, task
 from dotenv import load_dotenv
 from connect_db import DbConnection
 from crewai_tools import SerperDevTool
-from crewai_tools import WebsiteSearchTool, VisionTool
+from crewai_tools import WebsiteSearchTool ,VisionTool
 import os
 from tools.custom_tool import GoogleKeywordIdeaGeneratorTool
 
@@ -51,6 +51,7 @@ class Database:
         search_tools = [self.website_tool, self.serper_tool, self.vision_tool]
 
         def gather_product_info(context):
+            # Extract product details from the context
             product = context.get('Products') or context.get('product')
             description = context.get('Description', '')
             price = context.get('Price', 'Price not available')
@@ -62,10 +63,12 @@ class Database:
 
             print(f"[Agent] Gathering information for product: {product}")
             
+            # Use Serper tool to gather additional product info (description)
             serper_results = self.serper_tool.run({"search_query": product})
             if serper_results and isinstance(serper_results, dict):
                 description = serper_results.get("snippet", description)
 
+            # Use Website Tool if a URL is provided to enrich the description
             if url:
                 print(f"[Agent] Using WebsiteSearchTool to extract content from: {url}")
                 website_data = self.website_tool.run({"search_query": product, "website": url})
@@ -75,6 +78,7 @@ class Database:
                     if site_text:
                         description = f"{description}\n\nWebsite Extracted Text: {site_text[:500]}"
 
+            # Use Vision Tool if an image URL is provided to gather insights
             if image:
                 print(f"[Agent] Using VisionTool to analyze image: {image}")
                 vision_result = self.vision_tool.run({"image_path_url": image})
@@ -84,18 +88,21 @@ class Database:
                         image_summary = ", ".join(image_summary)
                     description = f"{description}\n\nImage Insights: {image_summary}"
 
+            # Ensure a full product info dictionary is returned
             product_info = {
                 'product': product,
                 'description': description or 'No description provided.',
                 'price': price,
                 'url': url or 'URL not provided.',
                 'image': image or 'Image not available.',
-                'features': ['Feature 1', 'Feature 2', 'Feature 3'],
-                'specifications': ['Specification 1', 'Specification 2'],
-                'benefits': ['Benefit 1', 'Benefit 2'],
+                'features': ['Feature 1', 'Feature 2', 'Feature 3'],  # Can be improved with dynamic data
+                'specifications': ['Specification 1', 'Specification 2'],  # As above
+                'benefits': ['Benefit 1', 'Benefit 2'],  # As above
             }
 
+            # Store the product information in memory
             self.memory_backend.store('product_info', product_info)
+            
             return product_info
 
         return Agent(
@@ -116,7 +123,7 @@ class Database:
 
             query = f"Keywords related to {product_info['product']}"
             print(f"[Agent] Searching for keywords with query: {query}")
-            search_results = search_tools[0].run({"query": query})
+            search_results = search_tools.run({"query": query})
             print("[Agent] Raw search results:", search_results)
 
             keywords = []
@@ -201,13 +208,6 @@ class Database:
             process=refine_blog
         )
 
-    @agent
-    def manager_agent(self) -> Agent:
-        return Agent(
-            config=self.agents_config.get('manager_agent', {}),
-            verbose=True
-        )
-
     @task
     def product_information_gather_task(self) -> Task:
         return Task(
@@ -245,13 +245,7 @@ class Database:
             agent=self.final_writer(),
             output_file='final_blog.md',
         )
-    @task
-    def manager_task(self) -> Task:
-        return Task(
-            config=self.tasks_config.get('manager_task', {}),
-            agent=self.manager_agent(),
-            output_file='manager_report.md',
-        )
+
     @crew
     def crew(self) -> Crew:
         return Crew(
@@ -261,7 +255,6 @@ class Database:
                 self.blog_writer(),
                 self.seo_agent(),
                 self.final_writer(),
-                self.manager_agent(),  # Included manager
             ],
             tasks=[
                 self.product_information_gather_task(),
@@ -270,10 +263,9 @@ class Database:
                 self.seo_optimization_task(),
                 self.final_write_task(),
             ],
-            manager_agent=self.manager_agent(),
             process=Process.sequential,
             verbose=True,
             memory=True,
-
+            # manager_agent=
             long_term_memory=None,
         )

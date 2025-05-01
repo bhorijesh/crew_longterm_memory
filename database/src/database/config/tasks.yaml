@@ -3,7 +3,6 @@ product_information_gather_task:
     Collect detailed {Products} product information, including features, specifications, and benefits, to support content creation using the provided tools. Use the Vision Tool for image analysis, Search in a Specific Website for relevant product data, and Serper for additional internet-wide search.
   expected_output: >
     A detailed product information report, including features, specifications, and benefits, to support content creation based on the gathered information from the Vision Tool (image reading), Search in a Specific Website (relevant product content), and Serper (internet-wide search).
-
   agent: product_information_gatherer
 
 
@@ -18,7 +17,6 @@ keyword_research_task:
     The results should be formatted as a bullet list.
     keywords must be list only no further explanation.
     The keywords should be relevant to the product information provided and aligned with the user's content strategy using custom tool.
-    tool: google_keyword_tool
   agent: keyword_researcher
 
 blog_writing_task:
@@ -47,14 +45,3 @@ final_write_task:
   expected_output: >
     A polished, humanized blog post, free of grammatical errors, with clear structure using proper headings, subheadings, and bullet points. The final blog should be easy to read, SEO-optimized, and formatted in Markdown, ready for publication with the generated keywords integrated naturally into the content. It should be engaging and tailored to the target audience, ensuring it aligns with the specified tone and language. Just include **Introduction**, **Body**, and **Conclusion** sections in the final output. Don't add any other sections.
   agent: final_writer
-
-
-
-manager_task:
-  description: >
-    Oversee and coordinate the entire blog generation workflow to ensure each agent performs effectively and outputs high-quality, SEO-optimized content.
-  expected_output: >
-    A report summarizing the status and success of each step in the pipeline. Identify and flag any errors or missing components in the workflow and suggest if any steps need to be repeated.
-  async_execution: false
-  output_file: manager_report.md
-  agent: manager_agent

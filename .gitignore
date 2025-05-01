@@ -3,4 +3,4 @@
 __pycache__/
 .DS_Store
 /config/
-database/src/database/keys/
+/keys/
