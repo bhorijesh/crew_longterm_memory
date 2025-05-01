@@ -10,13 +10,13 @@ from google.ads.googleads.v18.services.types.keyword_plan_idea_service import (
 )
 
 # Load configs properly
-with open("keys/google-ads.yml", "r") as f:
+with open("keys/google-ads.yaml", "r") as f:
     google_ads_config = yaml.safe_load(f)
 
 with open("keys/google-analytics-keys.json", "r") as f:
     google_analytics_keys = json.load(f)
 
-GOOGLE_ADS_YAML_FILE = "keys/google-ads.yml"
+GOOGLE_ADS_YAML_FILE = "keys/google-ads.yaml"
 GOOGLE_ADS_CUSTOMER_ID = google_ads_config.get("customer_id")
 
 
